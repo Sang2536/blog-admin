@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Str;
 
 class Post extends Model
 {
@@ -14,10 +15,11 @@ class Post extends Model
 
     protected $fillable = [
         'user_id', 'category_id', 'title', 'slug', 'excerpt',
-        'content', 'status', 'published_at'
+        'content', 'status', 'is_featured', 'published_at'
     ];
 
     protected $casts = [
+        'is_featured' => 'boolean',
         'published_at' => 'datetime',
     ];
 
@@ -50,6 +52,25 @@ class Post extends Model
     public function getExcerptShortAttribute(): string
     {
         return Str::limit(strip_tags($this->excerpt ?? $this->content), 100);
+    }
+
+    //  scope filter
+    public function scopeFilter($query, $filters)
+    {
+        if (!empty($filters['category'])) {
+            $query->whereHas('category', fn ($q) =>
+            $q->where('slug', $filters['category'])
+            );
+        }
+
+        if (!empty($filters['tags'])) {
+            $tags = explode(',', $filters['tags']);
+            $query->whereHas('tags', fn ($q) =>
+            $q->whereIn('slug', $tags)
+            );
+        }
+
+        return $query;
     }
 }
 

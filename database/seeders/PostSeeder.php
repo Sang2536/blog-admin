@@ -19,6 +19,8 @@ class PostSeeder extends Seeder
 
         foreach (range(1, 10) as $i) {
             $title = "Bài viết mẫu số $i";
+            $isFeatured = $i <= 3;
+
             $post = \App\Models\Post::create([
                 'user_id' => $user->id,
                 'category_id' => rand(1, 4),
@@ -27,6 +29,7 @@ class PostSeeder extends Seeder
                 'excerpt' => fake()->paragraph(),
                 'content' => fake()->paragraph(10),
                 'status' => 'published',
+                'is_featured' => $isFeatured,
                 'published_at' => now()->subDays(rand(0, 30)),
             ]);
 

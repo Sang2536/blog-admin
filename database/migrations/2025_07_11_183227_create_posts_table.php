@@ -20,6 +20,7 @@ return new class extends Migration
             $table->text('excerpt')->nullable();
             $table->longText('content');
             $table->enum('status', ['draft', 'published', 'scheduled'])->default('draft');
+            $table->boolean('is_featured')->default(false);
             $table->timestamp('published_at')->nullable();
             $table->timestamps();
         });
