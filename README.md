@@ -1,61 +1,69 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 📝 blog-admin
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+`blog-admin` là hệ thống quản trị nội dung (CMS) dành cho một blog cá nhân hoặc tổ chức, được phát triển bằng **Laravel**. 
 
-## About Laravel
+Dự án tập trung vào khả năng quản lý bài viết, danh mục, thẻ, người dùng, bình luận và media với giao diện dễ sử dụng và khả năng mở rộng cao.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Dự án được phát triển với mục đích học tập & triển khai cá nhân. Mọi đóng góp đều được hoan nghênh!
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+---
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## 📦 Cài đặt
 
-## Learning Laravel
+```bash
+# Clone project
+git clone https://github.com/tenban/blog-admin.git
+cd blog-admin
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+# Cài đặt package
+composer install
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+# Tạo file cấu hình môi trường
+cp .env.example .env
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+# Cấu hình biến môi trường
+vi .env    # hoặc code .env
 
-## Laravel Sponsors
+# Generate APP_KEY
+php artisan key:generate
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+# Migrate + seed dữ liệu mẫu (nếu có)
+php artisan migrate --seed
 
-### Premium Partners
+# Khởi chạy server
+php artisan serve
+```
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+---
 
-## Contributing
+## ⚙️ Tài khoản mẫu (dữ liệu seed)
+Email: admin@example.com
+Mật khẩu: password
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+---
 
-## Code of Conduct
+## 🚀 Tính năng chính
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+- ✅ Quản lý bài viết (viết, sửa, xoá, đăng nháp, xuất bản)
+- ✅ Quản lý danh mục & thẻ bài viết
+- ✅ Trình soạn thảo nội dung hỗ trợ Markdown hoặc WYSIWYG
+- ✅ Quản lý media (ảnh, video) với trình tải lên
+- ✅ Quản lý bình luận (duyệt, ẩn, xoá)
+- ✅ Quản lý người dùng & phân quyền
+- ✅ Tối ưu SEO (slug, meta title, meta description)
+- ✅ Giao diện admin hiện đại, responsive
+- ✅ Tích hợp API hỗ trợ giao diện frontend VueJS
 
-## Security Vulnerabilities
+---
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## 🛠️ Công nghệ sử dụng
 
-## License
+- [Laravel 10.x](https://laravel.com/)
+- [MySQL / MariaDB](https://www.mysql.com/)
+- [TailwindCSS](https://tailwindcss.com/)
+- [VueJS (Frontend riêng biệt)](https://vuejs.org/)
+- [Spatie Laravel Permission](https://github.com/spatie/laravel-permission)
+- [Laravel Sanctum](https://laravel.com/docs/sanctum) (cho xác thực API)
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+---
+
