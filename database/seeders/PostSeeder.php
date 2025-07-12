@@ -13,19 +13,19 @@ class PostSeeder extends Seeder
      */
     public function run(): void
     {
-        $user = \App\Models\User::first();
+        $userIds = \App\Models\User::pluck('id')->toArray();
         $tags = \App\Models\Tag::pluck('id')->toArray();
         $media = \App\Models\MediaFile::pluck('id')->toArray();
 
         foreach (range(1, 10) as $i) {
-            $title = "Bài viết mẫu số $i";
+            $title = "Bài viết mẫu số " . (\App\Models\Post::max('id') + 1) . ' - ' . uniqid();
             $isFeatured = $i <= 3;
 
             $post = \App\Models\Post::create([
-                'user_id' => $user->id,
+                'user_id' => $userIds[array_rand($userIds)],
                 'category_id' => rand(1, 4),
                 'title' => $title,
-                'slug' => Str::slug($title) . '-' . $i,
+                'slug' => Str::slug($title) . '-' . uniqid(),
                 'excerpt' => fake()->paragraph(),
                 'content' => fake()->paragraph(10),
                 'status' => 'published',
