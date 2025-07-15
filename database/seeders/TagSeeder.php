@@ -13,7 +13,11 @@ class TagSeeder extends Seeder
      */
     public function run(): void
     {
-        $tags = ['Laravel', 'VueJS', 'PHP', 'Web Development', 'Tutorial'];
+        $tags = [
+            'Laravel', 'VueJS', 'PHP', 'Web Development', 'Tutorial',
+            'Anime', 'Donghua', 'Manga', 'Manhua', 'Cosplay',
+            'Game', 'Genshin Impact', 'Honkai: Star Rail', 'Wuthering Wave', 'ZZZ',
+        ];
 
         foreach ($tags as $name) {
             \App\Models\Tag::create([

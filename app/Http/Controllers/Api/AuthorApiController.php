@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\AuthorResource;
+use App\Http\Resources\PostResource;
+use App\Models\Post;
 use App\Models\User;
-use Illuminate\Http\Request;
 
 class AuthorApiController extends Controller
 {
@@ -13,31 +15,16 @@ class AuthorApiController extends Controller
     {
         $authors = User::where('is_author', true)
             ->where('is_active', true)
-            ->select('id', 'name', 'avatar', 'email')
             ->get();
 
-        return response()->json([
-            'success' => true,
-            'data' => $authors,
-        ]);
+        return AuthorResource::collection($authors);
     }
 
     // GET /api/authors/{id}
     public function show($id)
     {
-        $author = User::where('is_author', true)
-            ->where('is_active', true)
-            ->findOrFail($id);
+        $author = User::where('id', $id)->findOrFail($id);
 
-        return response()->json([
-            'success' => true,
-            'data' => [
-                'id' => $author->id,
-                'name' => $author->name,
-                'avatar' => $author->avatar,
-                'email' => $author->email,
-                'created_at' => $author->created_at,
-            ]
-        ]);
+        return new AuthorResource($author);
     }
 }

@@ -16,8 +16,14 @@ class PostResource extends JsonResource
             'excerpt_short' => $this->excerpt_short,
             'content'       => $this->content,
             'published_at'  => $this->published_at->toDateTimeString(),
-            'author'        => $this->user->name ?? null,
+            'author'        => [
+                'id' => $this->user->id ?? null,
+                'name' => $this->user->name ?? null,
+                'avatar' => $this->user->avatar ?? null,
+                'is_active' => $this->user->is_active ?? null,
+            ],
             'category'      => [
+                'id' => $this->category->id ?? null,
                 'name' => $this->category->name ?? null,
                 'slug' => $this->category->slug ?? null,
             ],

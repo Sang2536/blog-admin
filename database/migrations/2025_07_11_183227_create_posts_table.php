@@ -21,6 +21,7 @@ return new class extends Migration
             $table->longText('content');
             $table->enum('status', ['draft', 'published', 'scheduled'])->default('draft');
             $table->boolean('is_featured')->default(false);
+            $table->unsignedBigInteger('views')->default(0);
             $table->timestamp('published_at')->nullable();
             $table->timestamps();
         });
