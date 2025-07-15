@@ -13,17 +13,13 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        \App\Models\User::factory()->create([
-            'name' => 'Admin',
-            'email' => 'admin@example.com',
-            'password' => bcrypt('password'),
-        ]);
-
         $this->call([
+            UserSeeder::class,
             CategorySeeder::class,
             TagSeeder::class,
-            MediaFileSeeder::class,
-            PostSeeder::class,
+             MediaFileSeeder::class,
+             PostSeeder::class,
+            // CrawPostSeeder::class,
             CommentSeeder::class,
         ]);
     }

@@ -12,7 +12,7 @@ class MediaFileSeeder extends Seeder
      */
     public function run(): void
     {
-        for ($i = 1; $i <= 5; $i++) {
+        for ($i = 1; $i <= 10; $i++) {
             \App\Models\MediaFile::create([
                 'name' => "Ảnh demo $i",
                 'file_path' => "media/demo_$i.jpg",

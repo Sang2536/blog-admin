@@ -30,6 +30,7 @@ class PostSeeder extends Seeder
                 'content' => fake()->paragraph(10),
                 'status' => 'published',
                 'is_featured' => $isFeatured,
+                'views' => rand(0, 10000),
                 'published_at' => now()->subDays(rand(0, 30)),
             ]);
 
