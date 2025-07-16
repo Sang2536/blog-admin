@@ -13,8 +13,10 @@ class AuthorApiController extends Controller
     // GET /api/authors
     public function index()
     {
-        $authors = User::where('is_author', true)
-            ->where('is_active', true)
+        $authors = User::with('posts')
+            ->withCount('posts')
+            ->where('is_author', true)
+            ->orderByDesc('posts_count')
             ->get();
 
         return AuthorResource::collection($authors);
@@ -23,7 +25,13 @@ class AuthorApiController extends Controller
     // GET /api/authors/{id}
     public function show($id)
     {
-        $author = User::where('id', $id)->findOrFail($id);
+        $author = User::where('id', $id)->first();
+
+        if (!$author) {
+            return response()->json([
+                'message' => 'Tác giả không tồn tại.'
+            ], 404);
+        }
 
         return new AuthorResource($author);
     }
