@@ -11,10 +11,11 @@ class AuthorResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'email' => $this->slug,
-            'is_active' => $this->slug,
-            'is_author' => $this->slug,
-            'avatar' => $this->slug,
+            'email' => $this->email,
+            'slug' => $this->slug,
+            'is_active' => $this->is_active,
+            'is_author' => $this->is_author,
+            'avatar' => $this->avatar,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

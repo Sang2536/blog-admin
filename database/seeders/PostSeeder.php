@@ -13,17 +13,21 @@ class PostSeeder extends Seeder
      */
     public function run(): void
     {
-        $userIds = \App\Models\User::pluck('id')->toArray();
+        $userIds = \App\Models\User::where('is_author', true)
+            ->where('is_active', true)
+            ->pluck('id')
+            ->toArray();
         $tags = \App\Models\Tag::pluck('id')->toArray();
+        $categoryIds = \App\Models\Category::pluck('id')->toArray();
         $media = \App\Models\MediaFile::pluck('id')->toArray();
 
-        foreach (range(1, 10) as $i) {
+        foreach (range(1, 50) as $i) {
             $title = "Bài viết mẫu số " . (\App\Models\Post::max('id') + 1) . ' - ' . uniqid();
             $isFeatured = $i <= 3;
 
             $post = \App\Models\Post::create([
                 'user_id' => $userIds[array_rand($userIds)],
-                'category_id' => rand(1, 4),
+                'category_id' => $categoryIds[array_rand($categoryIds)],
                 'title' => $title,
                 'slug' => Str::slug($title) . '-' . uniqid(),
                 'excerpt' => fake()->paragraph(),

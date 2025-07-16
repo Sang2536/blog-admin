@@ -14,11 +14,12 @@ class UserSeeder extends Seeder
         // Admin
         if (!User::where('email', 'admin@example.com')->exists()) {
             User::create([
-                'name' => 'Admin User',
+                'name' => 'Admin',
                 'email' => 'admin@example.com',
                 'email_verified_at' => now(),
                 'password' => Hash::make('password'),
                 'remember_token' => Str::random(10),
+                'slug' => 'admin',
                 'is_admin' => true,
                 'is_author' => true,
                 'is_active' => true,
@@ -29,11 +30,12 @@ class UserSeeder extends Seeder
         // Author
         if (!User::where('email', 'author@example.com')->exists()) {
             User::create([
-                'name' => 'Author User',
-                'email' => 'author@example.com',
+                'name' => 'Author Management',
+                'email' => 'author.management@example.com',
                 'email_verified_at' => now(),
                 'password' => Hash::make('password'),
                 'remember_token' => Str::random(10),
+                'slug' => 'author-management',
                 'is_admin' => false,
                 'is_author' => true,
                 'is_active' => true,
@@ -44,11 +46,12 @@ class UserSeeder extends Seeder
         // Inactive user
         if (!User::where('email', 'inactive@example.com')->exists()) {
             User::create([
-                'name' => 'Inactive User',
-                'email' => 'inactive@example.com',
+                'name' => 'Inactive Test',
+                'email' => 'inactive.test@example.com',
                 'email_verified_at' => now(),
                 'password' => Hash::make('password'),
                 'remember_token' => Str::random(10),
+                'slug' => 'inactive-test',
                 'is_admin' => false,
                 'is_author' => false,
                 'is_active' => false,

@@ -16,43 +16,60 @@ class PostApiController extends Controller
     public function index(Request $request)
     {
         $type = $request->query('type');
-        $limit = $request->query('limit', 6);
+
+        // Lấy thông tin phân trang từ query
+        $limit = $request->input('limit', 10);
+        $page = $request->input('page', 1);
+        $offset = ($page - 1) * $limit;
 
         switch ($type) {
             case 'featured':
-                $posts = $this->getFeaturedPosts($limit);
+                $posts = $this->getFeaturedPosts($limit, $offset);
                 break;
 
             case 'newest':
-                $posts = $this->getNewestPosts($limit);
+                $posts = $this->getNewestPosts($limit, $offset);
                 break;
 
             case 'oldest':
-                $posts = $this->getOldestPosts($limit);
+                $posts = $this->getOldestPosts($limit, $offset);
                 break;
 
             case 'related':
                 $postId = $request->query('post_id');
-                $posts = $this->getRelatedPosts($postId, $limit);
+                $posts = $this->getRelatedPosts($postId, $limit, $offset);
                 if ($posts === null) {
                     return response()->json(['message' => 'Post not found'], 404);
                 }
                 break;
 
             case 'search':
-                $posts = $this->searchPosts($request, $limit);
+                $posts = $this->searchPosts($request, $limit, $offset);
                 break;
 
             case 'popular':
-                $posts = $this->getPopularPosts($limit);
+                $posts = $this->getPopularPosts($limit, $offset);
                 break;
 
             default:
                 $posts = $this->getDefaultPosts();
-                return PostResource::collection($posts);
+
+                $countPosts = $posts->count();
+
+                $meta = $this->addMeta($countPosts, $limit, $page);
+
+                return PostResource::collection($posts)
+                    ->additional(['meta' => $meta]);
         }
 
-        return PostResource::collection($posts);
+        // Tổng số bài viết
+        $countPosts = $posts->count();
+
+        $meta = $this->addMeta($countPosts, $limit, $page);
+
+        // Trả về PostResource cùng với meta
+        return PostResource::collection($posts)
+            ->additional(['meta' => $meta]);
     }
 
     //  GET /posts/{slug}
@@ -67,52 +84,108 @@ class PostApiController extends Controller
     }
 
     //  GET /posts/author/{name}
-    public function getPostsByAuthor($name)
+    public function getPostsByAuthor(Request $request, $name)
     {
-        $limit = 10;
+        $author = User::where('name', $name)->first();
 
-        $user = User::where('name', $name)->firstOrFail();
+        if (!$author) {
+            return response()->json([
+                'message' => 'Tác giả không tồn tại.'
+            ], 404);
+        }
+
+        // Lấy thông tin phân trang từ query
+        $limit = $request->input('limit', 10);
+        $page = $request->input('page', 1);
+        $offset = ($page - 1) * $limit;
+
+        // Tổng số bài viết
+        $countPosts = Post::where('user_id', $author->id)->count();
 
         $posts = $this->baseQuery()
-            ->where('user_id', $user->id)
+            ->where('user_id', $author->id)
             ->orderByDesc('published_at')
-            ->take($limit)
+            ->offset($offset)
+            ->limit($limit)
             ->get();
 
-        return PostResource::collection($posts);
+        // Tạo meta
+        $meta = $this->addMeta($countPosts, $limit, $page);
+
+        // Trả về PostResource cùng với meta
+        return PostResource::collection($posts)
+            ->additional(['meta' => $meta]);
     }
 
     //  GET /posts/category/{slug}
-    public function getPostsByCategory($slug)
+    public function getPostsByCategory(Request $request, $slug)
     {
-        $limit = 10;
+        $category = Category::where('slug', $slug)->first();
 
-        $category = Category::where('slug', $slug)->firstOrFail();
+        if (!$category) {
+            return response()->json([
+                'message' => 'Danh mục không tồn tại.'
+            ], 404);
+        }
 
+        // Lấy thông tin phân trang từ query
+        $limit = $request->input('limit', 10);
+        $page = $request->input('page', 1);
+        $offset = ($page - 1) * $limit;
+
+        // Tổng số bài viết
+        $countPosts = Post::where('category_id', $category->id)->count();
+
+        // Lấy danh sách bài viết theo phân trang
         $posts = $this->baseQuery()
             ->where('category_id', $category->id)
             ->orderByDesc('published_at')
-            ->take($limit)
+            ->offset($offset)
+            ->limit($limit)
             ->get();
 
-        return PostResource::collection($posts);
+        // Tạo meta
+        $meta = $this->addMeta($countPosts, $limit, $page);
+
+        // Trả về PostResource cùng với meta
+        return PostResource::collection($posts)
+            ->additional(['meta' => $meta]);
     }
 
     //  GET /posts/tag/{slug}
-    public function getPostsByTag($slug)
+    public function getPostsByTag(Request $request, $slug)
     {
-        $limit = 10;
+        $tag = Tag::where('slug', $slug)->first();
 
-        $tag = Tag::where('slug', $slug)->firstOrFail();
+        if (!$tag) {
+            return response()->json([
+                'message' => 'Thẻ không tồn tại.'
+            ], 404);
+        }
+
+        // Lấy thông tin phân trang từ query
+        $limit = $request->input('limit', 10);
+        $page = $request->input('page', 1);
+        $offset = ($page - 1) * $limit;
+
+        // Tổng số bài viết
+        $countPosts = Post::join('post_tag', 'posts.id', '=', 'post_tag.post_id')
+            ->where('post_tag.tag_id', $tag->id)->count();
 
         $posts = $this->baseQuery()
             ->join('post_tag', 'posts.id', '=', 'post_tag.post_id')
             ->where('post_tag.tag_id', $tag->id)
             ->orderByDesc('published_at')
-            ->take($limit)
+            ->offset($offset)
+            ->limit($limit)
             ->get();
 
-        return PostResource::collection($posts);
+        // Tạo meta
+        $meta = $this->addMeta($countPosts, $limit, $page);
+
+        // Trả về PostResource cùng với meta
+        return PostResource::collection($posts)
+            ->additional(['meta' => $meta]);
     }
 
     private function baseQuery()
@@ -122,32 +195,35 @@ class PostApiController extends Controller
             ->whereNotNull('published_at');
     }
 
-    private function getFeaturedPosts($limit)
+    private function getFeaturedPosts($limit, $offset = 0)
     {
         return $this->baseQuery()
             ->where('is_featured', true)
             ->orderByDesc('published_at')
+            ->offset($offset)
             ->take($limit)
             ->get();
     }
 
-    private function getNewestPosts($limit)
+    private function getNewestPosts($limit, $offset = 0)
     {
         return $this->baseQuery()
             ->orderByDesc('published_at')
+            ->offset($offset)
             ->take($limit)
             ->get();
     }
 
-    private function getOldestPosts($limit)
+    private function getOldestPosts($limit, $offset = 0)
     {
         return $this->baseQuery()
             ->orderBy('published_at')
+            ->offset($offset)
             ->take($limit)
             ->get();
     }
 
-    private function getRelatedPosts($postId, $limit)
+    private function getRelatedPosts($postId, $limit, $offset = 0)
     {
         $currentPost = Post::with('tags')->find($postId);
 
@@ -163,11 +239,12 @@ class PostApiController extends Controller
                 $query->whereIn('tags.id', $tagIds);
             })
             ->orderByDesc('published_at')
+            ->offset($offset)
             ->take($limit)
             ->get();
     }
 
-    private function searchPosts($request, $limit)
+    private function searchPosts($request, $limit, $offset = 0)
     {
         $query = $this->baseQuery();
 
@@ -200,14 +277,16 @@ class PostApiController extends Controller
         }
 
         return $query->orderByDesc('published_at')
+            ->offset($offset)
             ->take($limit)
             ->get();
     }
 
-    private function getPopularPosts($limit)
+    private function getPopularPosts($limit, $offset = 0)
     {
         return $this->baseQuery()
             ->orderByDesc('views')
+            ->offset($offset)
             ->take($limit)
             ->get();
     }
@@ -217,5 +296,15 @@ class PostApiController extends Controller
         return $this->baseQuery()
             ->orderByDesc('published_at')
             ->paginate(10);
+    }
+
+    private function addMeta(int $countPosts, ?int $limit = 10, ?int $currentPage = 1)
+    {
+        return $meta = [
+            "total" => $countPosts,
+            "per_page" => $limit,
+            "current_page" => $currentPage,
+            "last_page" => ceil($countPosts / $limit),
+        ];
     }
 }
