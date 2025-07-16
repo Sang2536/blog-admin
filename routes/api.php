@@ -8,7 +8,7 @@ use App\Http\Controllers\Api\TagApiController;
 // GET Post
 Route::get('/posts', [PostApiController::class, 'index']);
 Route::get('/posts/{slug}', [PostApiController::class, 'show']);
-Route::get('/posts/author/{name}', [PostApiController::class, 'getPostsByAuthor']);
+Route::get('/posts/author/{slug}', [PostApiController::class, 'getPostsByAuthor']);
 Route::get('/posts/category/{slug}', [PostApiController::class, 'getPostsByCategory']);
 Route::get('/posts/tag/{slug}', [PostApiController::class, 'getPostsByTag']);
 
