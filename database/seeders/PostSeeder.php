@@ -13,15 +13,12 @@ class PostSeeder extends Seeder
      */
     public function run(): void
     {
-        $userIds = \App\Models\User::where('is_author', true)
-            ->where('is_active', true)
-            ->pluck('id')
-            ->toArray();
+        $userIds = \App\Models\User::where('is_author', true)->pluck('id')->toArray();
         $tags = \App\Models\Tag::pluck('id')->toArray();
         $categoryIds = \App\Models\Category::pluck('id')->toArray();
         $media = \App\Models\MediaFile::pluck('id')->toArray();
 
-        foreach (range(1, 50) as $i) {
+        foreach (range(1, rand(1000, 3000)) as $i) {
             $title = "Bài viết mẫu số " . (\App\Models\Post::max('id') + 1) . ' - ' . uniqid();
             $isFeatured = $i <= 3;
 

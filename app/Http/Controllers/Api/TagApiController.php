@@ -20,10 +20,8 @@ class TagApiController extends Controller
     }
 
     // GET /api/tags/{id}
-    public function show($id)
+    public function show(Tag $tag)
     {
-        $tag = Tag::select('id', 'name', 'slug', 'created_at', 'updated_at')->findOrFail($id);
-
         return response()->json([
             'success' => true,
             'data' => $tag,
