@@ -17,11 +17,9 @@ class CategoryApiController extends Controller
     }
 
     // GET /api/categories/{id}
-    public function show($id)
+    public function show(Category $category)
     {
-        $category = Category::with('parent')
-            ->where('id', $id)
-            ->findOrFail($id);
+        $category->load('parent');
 
         return new CategoryResource($category);
     }

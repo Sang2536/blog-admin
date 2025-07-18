@@ -13,7 +13,12 @@ class CategorySeeder extends Seeder
      */
     public function run(): void
     {
-        $categories = ['Tin tức', 'Hướng dẫn', 'Chia sẻ', 'Công nghệ'];
+        $categories = [
+            'Tin tức', 'Hướng dẫn', 'Chia sẻ', 'Công nghệ',
+            'Kinh doanh', 'Thể thao', 'Sức khỏe', 'Đời sống',
+            'Giải trí', 'Sách', 'Du lịch', 'Phong cách sống',
+            'Xã hội', 'Tài chính', 'Pháp luật', 'Giáo dục'
+        ];
 
         foreach ($categories as $name) {
             \App\Models\Category::create([

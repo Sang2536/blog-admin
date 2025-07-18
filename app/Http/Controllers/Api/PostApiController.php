@@ -84,9 +84,9 @@ class PostApiController extends Controller
     }
 
     //  GET /posts/author/{name}
-    public function getPostsByAuthor(Request $request, $name)
+    public function getPostsByAuthor(Request $request, $slug)
     {
-        $author = User::where('name', $name)->first();
+        $author = User::where('slug', $slug)->first();
 
         if (!$author) {
             return response()->json([

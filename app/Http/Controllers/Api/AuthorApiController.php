@@ -23,10 +23,8 @@ class AuthorApiController extends Controller
     }
 
     // GET /api/authors/{id}
-    public function show($id)
+    public function show(User $author)
     {
-        $author = User::where('id', $id)->first();
-
         if (!$author) {
             return response()->json([
                 'message' => 'Tác giả không tồn tại.'

@@ -25,6 +25,19 @@ class UserFactory extends Factory
     {
         $name = fake()->name();
 
+        $avatar = [
+            'https://photo.znews.vn/w1920/Uploaded/zagtgt/2025_07_09/Pickleball_Sep_4.jpg',
+            'https://photo.znews.vn/w210/Uploaded/wqdyqdxwp/2025_07_15/Xiao_1.jpg',
+            'https://photo.znews.vn/w480/Uploaded/bpcgpivp/2025_07_17/thuphong_23_znews.jpg',
+            'https://photo.znews.vn/w1000/Uploaded/zagtgt/2025_07_09/pickleball_1_1.jpeg',
+            'https://photo.znews.vn/w480/Uploaded/ovhunst/2025_07_16/1x_1_3.jpg',
+            'https://photo.znews.vn/w480/Uploaded/rotnba/2025_07_09/snapins_ai_3439396192491597819_1_.jpg',
+            'https://photo.znews.vn/w480/Uploaded/rotnba/2025_07_10/IMGL4243_znews.jpg',
+            'https://photo.znews.vn/w480/Uploaded/rotnba/2025_07_13/snapins_ai_DMAl1psT_d_1_1_.jpg',
+            'https://photo.znews.vn/w480/Uploaded/pwvovowk/2025_07_10/unseen_studio_s9CC2SKySJM_unsplash.jpg',
+            'https://photo.znews.vn/w480/Uploaded/wqdyqdxwp/2025_07_08/6C018A55_8CC5_4A52_B7BB_F2CFC754F8C9_1_201_a.jpeg'
+        ];
+
         return [
             'name' => $name,
             'email' => fake()->unique()->safeEmail(),
@@ -35,7 +48,7 @@ class UserFactory extends Factory
             'is_admin' => false,
             'is_author' => random_int(0, 1) === 1,
             'is_active' => random_int(0, 1) === 1,
-            'avatar' => null,
+            'avatar' => fake()->boolean() ? $avatar[array_rand($avatar)] : null,
         ];
     }
 

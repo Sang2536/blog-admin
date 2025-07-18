@@ -15,12 +15,22 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             UserSeeder::class,
+
             CategorySeeder::class,
             TagSeeder::class,
-             MediaFileSeeder::class,
-             PostSeeder::class,
-            // CrawPostSeeder::class,
+            MediaFileSeeder::class,
+
+            PostSeeder::class,
             CommentSeeder::class,
+
+            // CrawPostSeeder::class,
+
+            ActivitySeeder::class,
+            RewardSeeder::class,
+            ParticipantSeeder::class,
+
+            RecruitmentSeeder::class,
+            ApplicationSeeder::class,
         ]);
     }
 
