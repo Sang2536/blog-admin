@@ -19,7 +19,6 @@ Route::prefix('posts')->group(function () {
     Route::get('/tag/{slug}', [PostApiController::class, 'getPostsByTag']);
 });
 
-
 // GET Author
 Route::prefix('authors')->group(function () {
     Route::get('/', [AuthorApiController::class, 'index']);
