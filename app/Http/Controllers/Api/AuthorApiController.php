@@ -4,8 +4,6 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\AuthorResource;
-use App\Http\Resources\PostResource;
-use App\Models\Post;
 use App\Models\User;
 
 class AuthorApiController extends Controller
@@ -19,18 +17,35 @@ class AuthorApiController extends Controller
             ->orderByDesc('posts_count')
             ->get();
 
-        return AuthorResource::collection($authors);
+        $authorStats = [
+            'authors' => $authors->count(),
+            'posts' => $authors->sum(fn ($author) => $author->posts->count()),
+            'post_views' => $authors->sum(fn ($author) => $author->posts->sum('views')),
+        ];
+
+        return AuthorResource::collection($authors)
+            ->additional(['stats' => $authorStats]);
     }
 
-    // GET /api/authors/{id}
-    public function show(User $author)
+    // GET /api/authors/{author}
+    public function show($author)
     {
-        if (!$author) {
+        $authorFirst = User::where('id', $author)
+                ->orWhere('slug', $author)
+                ->first();
+
+        if (!$authorFirst) {
             return response()->json([
                 'message' => 'Tác giả không tồn tại.'
             ], 404);
         }
 
-        return new AuthorResource($author);
+        $authorStats = [
+            'posts' => $authorFirst->posts->count(),
+            'post_views' => $authorFirst->posts->sum('views'),
+        ];
+
+        return (new AuthorResource($authorFirst))
+            ->additional(['stats' => $authorStats]);
     }
 }

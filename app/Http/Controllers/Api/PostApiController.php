@@ -58,18 +58,35 @@ class PostApiController extends Controller
 
                 $meta = $this->addMeta($countPosts, $limit, $page);
 
+                // Tính stats
+                $stats = [
+                    'total' => $posts->count(),
+                    'views' => $posts->sum(fn($post) => $post->views),
+                    'comments' => $posts->sum(fn($post) => $post->comments_count ?? 0),
+                ];
+
                 return PostResource::collection($posts)
-                    ->additional(['meta' => $meta]);
+                    ->additional(['meta' => $meta, 'stats' => $stats]);;
         }
+
+        // Đảm bảo $posts là một Collection nếu chưa là
+        $posts = collect($posts);
 
         // Tổng số bài viết
         $countPosts = $posts->count();
 
         $meta = $this->addMeta($countPosts, $limit, $page);
 
+        // Tính stats
+        $stats = [
+            'total' => $posts->count(),
+            'views' => $posts->sum(fn($post) => $post->views),
+            'comments' => $posts->sum(fn($post) => $post->comments_count ?? 0),
+        ];
+
         // Trả về PostResource cùng với meta
         return PostResource::collection($posts)
-            ->additional(['meta' => $meta]);
+            ->additional(['meta' => $meta, 'stats' => $stats]);
     }
 
     //  GET /posts/{slug}
@@ -112,9 +129,16 @@ class PostApiController extends Controller
         // Tạo meta
         $meta = $this->addMeta($countPosts, $limit, $page);
 
+        // Thống kê
+        $stats = [
+            'total' => $posts->count(),
+            'views' => $posts->sum('views'),
+            'comments' => $posts->sum('comments_count'),
+        ];
+
         // Trả về PostResource cùng với meta
         return PostResource::collection($posts)
-            ->additional(['meta' => $meta]);
+            ->additional(['meta' => $meta, 'stats' => $stats]);;
     }
 
     //  GET /posts/category/{slug}
@@ -147,9 +171,16 @@ class PostApiController extends Controller
         // Tạo meta
         $meta = $this->addMeta($countPosts, $limit, $page);
 
+        // Thống kê
+        $stats = [
+            'total' => $posts->count(),
+            'views' => $posts->sum('views'),
+            'comments' => $posts->sum('comments_count'),
+        ];
+
         // Trả về PostResource cùng với meta
         return PostResource::collection($posts)
-            ->additional(['meta' => $meta]);
+            ->additional(['meta' => $meta, 'stats' => $stats]);;
     }
 
     //  GET /posts/tag/{slug}
@@ -183,14 +214,21 @@ class PostApiController extends Controller
         // Tạo meta
         $meta = $this->addMeta($countPosts, $limit, $page);
 
+        // Thống kê
+        $stats = [
+            'total' => $posts->count(),
+            'views' => $posts->sum('views'),
+            'comments' => $posts->sum('comments_count'),
+        ];
+
         // Trả về PostResource cùng với meta
         return PostResource::collection($posts)
-            ->additional(['meta' => $meta]);
+            ->additional(['meta' => $meta, 'stats' => $stats]);;
     }
 
     private function baseQuery()
     {
-        return Post::with(['user', 'category', 'tags', 'media'])
+        return Post::with(['user', 'category', 'tags', 'media', 'comments'])
             ->where('status', 'published')
             ->whereNotNull('published_at');
     }
@@ -295,7 +333,7 @@ class PostApiController extends Controller
     {
         return $this->baseQuery()
             ->orderByDesc('published_at')
-            ->paginate(10);
+            ->get();
     }
 
     private function addMeta(int $countPosts, ?int $limit = 10, ?int $currentPage = 1)

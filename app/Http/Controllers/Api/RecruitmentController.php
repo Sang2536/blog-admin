@@ -11,19 +11,44 @@ class RecruitmentController extends Controller
     // Lấy danh sách tuyển dụng đang active (phân trang)
     public function index()
     {
-        $recruitments = Recruitment::with('user')
+        $recruitments = Recruitment::with('user', 'applications')
             ->where('is_active', true)
             ->orderByDesc('start_date')
-            ->paginate(10);
+            ->get();
 
-        return RecruitmentResource::collection($recruitments);
+        $stats =[
+            'recruitments' => $recruitments->count(),
+            'active' => $recruitments->where('is_active', true)->count(),
+            'inactive' => $recruitments->count() - $recruitments->where('is_active', true)->count(),
+
+        ];
+
+        return RecruitmentResource::collection($recruitments)
+            ->additional(['stats' => $stats]);
     }
 
     // Lấy chi tiết một đợt tuyển dụng
-    public function show(Recruitment $recruitment)
+    public function show($recruitment)
     {
-        $recruitment->load(['user', 'applications']);
+        $recruitmentFirst = Recruitment::with(['user', 'applications'])
+            ->where('id', $recruitment)
+            ->orWhere('slug', $recruitment)
+            ->first();
 
-        return new RecruitmentResource($recruitment);
+        if (!$recruitmentFirst) {
+            return response()->json([
+                'message' => 'Tuyển dụng này không tồn tại.'
+            ], 404);
+        }
+
+        $stats =[
+            'apply_total' => $recruitmentFirst->applications->count(),
+            'rejected' => $recruitmentFirst->applications->where('status', 'rejected')->count(),
+            'accepted' => $recruitmentFirst->applications->where('status', 'accepted')->count(),
+            'pending' => $recruitmentFirst->applications->where('status', 'pending')->count(),
+        ];
+
+        return (new RecruitmentResource($recruitment))
+            ->additional(['stats' => $stats]);
     }
 }

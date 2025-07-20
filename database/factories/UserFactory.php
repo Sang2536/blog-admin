@@ -49,6 +49,7 @@ class UserFactory extends Factory
             'is_author' => random_int(0, 1) === 1,
             'is_active' => random_int(0, 1) === 1,
             'avatar' => fake()->boolean() ? $avatar[array_rand($avatar)] : null,
+            'bio' => fake()->paragraph(),
         ];
     }
 

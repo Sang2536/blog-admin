@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('activities', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->string('type'); // 'event' | 'competition'
+            $table->string('type'); // 'event' | 'competition' | 'survey'
             $table->string('name');
             $table->string('slug')->unique();
             $table->string('image')->nullable();

@@ -24,6 +24,7 @@ class UserSeeder extends Seeder
                 'is_author' => true,
                 'is_active' => true,
                 'avatar' => null,
+                'bio' => 'Admin'
             ]);
         }
 
@@ -40,6 +41,7 @@ class UserSeeder extends Seeder
                 'is_author' => true,
                 'is_active' => true,
                 'avatar' => null,
+                'bio' => 'Author Management'
             ]);
         }
 
@@ -56,6 +58,7 @@ class UserSeeder extends Seeder
                 'is_author' => false,
                 'is_active' => false,
                 'avatar' => null,
+                'bio' => 'Inactive Test'
             ]);
         }
 
