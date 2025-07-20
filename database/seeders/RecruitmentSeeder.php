@@ -11,7 +11,7 @@ class RecruitmentSeeder extends Seeder
     {
         $userIds = \App\Models\User::where('is_author', true)->pluck('id')->toArray();
 
-        $jobTitle = [
+        $position = [
             'Cộng tác viên nội dung',
             'Biên tập viên',
             'Biên tập viên nội dung',
@@ -30,12 +30,14 @@ class RecruitmentSeeder extends Seeder
             'Thực tập sinh',
         ];
         $locations = ['Online', 'Hà Nội', 'Thành phố Hồ Chí Minh', 'Đà Nẵng', 'Hải Phòng', 'Huế', 'Cần Thơ'];
-        $types = ['full-time', 'part-time', 'internship'];
+        $types = ['full-time', 'part-time', 'remote', 'hybrid', 'contract'];
 
-        foreach ($jobTitle as $index => $item) {
+        foreach ($position as $index => $item) {
+            $jobTitle = fake()->jobTitle();
             Recruitment::create([
                 'user_id' => $userIds[array_rand($userIds)],
-                'title' => fake()->jobTitle(),
+                'title' => $jobTitle,
+                'slug' => str()->slug($jobTitle) . '-' . uniqid(),
                 'description' => fake()->paragraph(5),
                 'position' => $item,
                 'location' => fake()->randomElement($locations),

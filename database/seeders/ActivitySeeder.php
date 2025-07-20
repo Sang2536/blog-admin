@@ -44,6 +44,11 @@ class ActivitySeeder extends Seeder
                 'location' => 'HCM',
             ],
             [
+                'type' => 'survey',
+                'name' => 'Bạn mong đợi gì ở phiên bản tiếp theo?',
+                'location' => 'Online',
+            ],
+            [
                 'type' => 'competition',
                 'name' => 'Cơ Hội Nhận 30 Triệu Đồng Từ Cuộc Thi Thiết Kế Biểu Trưng (Logo) Của Phường Với Chủ Đề “Phường Sài Gòn - Hội Tụ Và Tỏa Sáng” 2025 (Miễn Phí Tham Dự)',
                 'location' => 'Toàn quốc',
@@ -74,6 +79,16 @@ class ActivitySeeder extends Seeder
                 'location' => 'HCM',
             ],
             [
+                'type' => 'survey',
+                'name' => 'Bạn thường làm gì trong một website?',
+                'location' => 'Online',
+            ],
+            [
+                'type' => 'survey',
+                'name' => 'Bạn cần gì ở một website hoàn hảo?',
+                'location' => 'Online',
+            ],
+            [
                 'type' => 'competition',
                 'name' => 'Cơ Hội Nhận $300 Từ Cuộc Thi Viết Biopage Storytelling Writing Contest Năm 2025 (Miễn Phí Tham Dự)',
                 'location' => 'Toàn cầu',
@@ -84,9 +99,19 @@ class ActivitySeeder extends Seeder
                 'location' => 'Toàn quốc',
             ],
             [
+                'type' => 'survey',
+                'name' => 'Giúp chúng tôi phục vụ bạn tốt hơn!',
+                'location' => 'Online',
+            ],
+            [
                 'type' => 'competition',
                 'name' => 'Cơ Hội Thứ Sức Bản Thân Tại Cuộc Thi Marketing Challengers 2025 (Miễn Phí Tham Dự)',
                 'location' => 'Toàn quốc',
+            ],
+            [
+                'type' => 'survey',
+                'name' => 'Khảo sát nhanh về trải nghiệm người dùng',
+                'location' => 'Online',
             ],
             [
                 'type' => 'competition',
@@ -122,6 +147,16 @@ class ActivitySeeder extends Seeder
                 'type' => 'event',
                 'name' => 'Chương Trình Huấn Luyện Startup MasterTrack - 9 Modules Kiến Tạo Doanh Nghiệp Bền Vững 2025 (Miễn Phí Tham Dự)',
                 'location' => 'HCM',
+            ],
+            [
+                'type' => 'survey',
+                'name' => 'Bạn mong muốn điều gì ở một website?',
+                'location' => 'Online',
+            ],
+            [
+                'type' => 'survey',
+                'name' => 'Bạn mong chờ nội dung gì trên một Blog website?',
+                'location' => 'Online',
             ],
         ];
 

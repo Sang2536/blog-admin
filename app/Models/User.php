@@ -27,6 +27,7 @@ class User extends Authenticatable
         'is_author',
         'is_active',
         'avatar',
+        'bio',
     ];
 
     /**

@@ -19,12 +19,35 @@ class ActivityController extends Controller
             ->latest()
             ->get();
 
-        return ActivityResource::collection($activities);
+        $stats = [
+            'activities' => $activities->count(),
+            'event' => $activities->where('type', 'event')->count(),
+            'competition' => $activities->where('type', 'competition')->count(),
+            'survey' => $activities->where('type', 'survey')->count(),
+        ];
+
+        return ActivityResource::collection($activities)
+            ->additional(['stats' => $stats]);
     }
 
-    public function show(Activity $activity)
+    public function show($activity)
     {
-        $activity->load(['user', 'rewards', 'participants']);
-        return new ActivityResource($activity);
+        $activityFirst = Activity::with(['participants', 'user', 'rewards'])
+            ->where('id', $activity)
+            ->orWhere('slug', $activity)
+            ->first();
+
+        if (!$activityFirst) {
+            return response()->json([
+                'message' => 'Không có hoạt động.'
+            ], 404);
+        }
+
+        $stats = [
+            'participants' => $activityFirst->participants->count(),
+        ];
+
+        return (new ActivityResource($activityFirst))
+            ->additional(['stats' => $stats]);
     }
 }
