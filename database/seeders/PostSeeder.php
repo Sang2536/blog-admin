@@ -20,7 +20,6 @@ class PostSeeder extends Seeder
 
         foreach (range(1, rand(1000, 3000)) as $i) {
             $title = "Bài viết mẫu số " . (\App\Models\Post::max('id') + 1) . ' - ' . uniqid();
-            $isFeatured = $i <= 3;
 
             $post = \App\Models\Post::create([
                 'user_id' => $userIds[array_rand($userIds)],
@@ -30,7 +29,7 @@ class PostSeeder extends Seeder
                 'excerpt' => fake()->paragraph(),
                 'content' => fake()->paragraph(10),
                 'status' => 'published',
-                'is_featured' => $isFeatured,
+                'is_featured' => rand(0, 1) === 1,
                 'views' => rand(0, 10000),
                 'published_at' => now()->subDays(rand(0, 30)),
             ]);

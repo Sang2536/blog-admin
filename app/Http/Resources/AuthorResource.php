@@ -16,6 +16,7 @@ class AuthorResource extends JsonResource
             'is_active' => $this->is_active,
             'is_author' => $this->is_author,
             'avatar' => $this->avatar,
+            'bio' => $this->bio,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

@@ -13,15 +13,22 @@ class CommentSeeder extends Seeder
     public function run(): void
     {
         $posts = \App\Models\Post::all();
-        $user = \App\Models\User::first();
+        $userIds = \App\Models\User::pluck('id')->toArray();
 
         foreach ($posts as $post) {
-            foreach (range(1, 3) as $i) {
-                \App\Models\Comment::create([
+            $createdComments = [];
+
+            foreach (range(1, rand(0, 10)) as $i) {
+                $isReply = $createdComments && rand(0, 100) < 30;
+
+                $comment = \App\Models\Comment::create([
                     'post_id' => $post->id,
-                    'user_id' => $user->id,
+                    'user_id' => $userIds[array_rand($userIds)],
                     'content' => fake()->sentence(10),
+                    'parent_id' => $isReply ? collect($createdComments)->random()->id : null,
                 ]);
+
+                $createdComments[] = $comment;
             }
         }
     }
