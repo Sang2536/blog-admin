@@ -13,7 +13,7 @@ class AuthorApiController extends Controller
     public function index(Request $request)
     {
         // Lấy thông tin phân trang từ query
-        $limit = $request->input('limit', 20);
+        $limit = $request->input('limit', 10);
         $page = $request->input('page', 1);
         $offset = ($page - 1) * $limit;
 
@@ -25,7 +25,8 @@ class AuthorApiController extends Controller
             ->where('is_author', true)
             ->orderByDesc('posts_count')
             ->offset($offset)
-            ->paginate($limit, ['*'], 'page', $page);
+            ->limit($limit)
+            ->get();
 
         // Thống kê
         $authorStats = [
@@ -43,7 +44,7 @@ class AuthorApiController extends Controller
         ];
 
         return AuthorResource::collection($authors)
-            ->additional(['stats' => $authorStats, 'meta' => $meta]);;
+            ->additional(['stats' => $authorStats, 'meta' => $meta]);
     }
 
     // GET /api/authors/{author}

@@ -29,7 +29,7 @@ class UserSeeder extends Seeder
         }
 
         // Author
-        if (!User::where('email', 'author@example.com')->exists()) {
+        if (!User::where('email', 'author.management@example.com')->exists()) {
             User::create([
                 'name' => 'Author Management',
                 'email' => 'author.management@example.com',
@@ -46,7 +46,7 @@ class UserSeeder extends Seeder
         }
 
         // Inactive user
-        if (!User::where('email', 'inactive@example.com')->exists()) {
+        if (!User::where('email', 'inactive.test@example.com')->exists()) {
             User::create([
                 'name' => 'Inactive Test',
                 'email' => 'inactive.test@example.com',
