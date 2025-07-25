@@ -18,7 +18,12 @@ class PostResource extends JsonResource
             'published_at'  => $this->published_at->toDateTimeString(),
             'author'        => new AuthorResource($this->whenLoaded('user')),
             'category'      => new CategoryResource($this->whenLoaded('category')),
-            'tags'          => $this->tags->pluck('name'),
+            'tags'          => $this->tags->map(function ($tag) {
+                return [
+                    'name' => $tag->name,
+                    'slug' => $tag->slug,
+                ];
+            }),
             'media'         => $this->media->map(function ($media) {
                 return [
                     'url' => $media->url,

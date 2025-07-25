@@ -30,10 +30,6 @@ class PostFilterService
                 'total' => Post::count(),
             ],
             'related' => $this->getRelatedPosts($request->query('related_to'), $limit, $offset),
-            'search' => [
-                'posts' => $this->searchPosts($request, $limit, $offset),
-                'total' => $this->countSearchPosts($request),
-            ],
             default => 'default',
         };
     }
@@ -106,7 +102,7 @@ class PostFilterService
         ];
     }
 
-    private function searchPosts(Request $request, $limit, $offset)
+    public function searchPosts(Request $request, $limit, $offset)
     {
         $query = $this->searchQuery($request);
 
@@ -116,7 +112,7 @@ class PostFilterService
             ->get();
     }
 
-    private function countSearchPosts(Request $request)
+    public function countSearchPosts(Request $request)
     {
         return $this->searchQuery($request)->count();
     }
@@ -126,7 +122,7 @@ class PostFilterService
         $query = $this->baseQuery();
 
         // Lọc theo keyword / search toàn văn
-        $keyword = $request->get('keyword') ?? $request->get('search');
+        $keyword = $request->get('keyword') ?? $request->get('q');
         $separator = $request->get('separator', ' ');
 
         if ($keyword) {

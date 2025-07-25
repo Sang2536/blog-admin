@@ -105,6 +105,7 @@ class PostApiController extends Controller
         $countPosts = $author->posts()->count();
 
         $posts = $author->posts()
+            ->with(['user', 'category', 'tags', 'media'])
             ->orderByDesc('published_at')
             ->offset($offset)
             ->limit($limit)
@@ -149,6 +150,7 @@ class PostApiController extends Controller
 
         // Lấy danh sách bài viết theo phân trang
         $posts = $category->posts()
+            ->with(['user', 'category', 'tags', 'media'])
             ->orderByDesc('published_at')
             ->offset($offset)
             ->limit($limit)
@@ -195,6 +197,7 @@ class PostApiController extends Controller
 
         // Lấy bài viết theo điều kiện
         $posts = $tag->posts()
+            ->with(['user', 'category', 'tags', 'media'])
             ->orderByDesc('published_at')
             ->offset($offset)
             ->limit($limit)
@@ -214,6 +217,30 @@ class PostApiController extends Controller
         ];
 
         // Trả về PostResource cùng với meta
+        return PostResource::collection($posts)
+            ->additional(['meta' => $meta, 'stats' => $stats]);
+    }
+
+    public function getPostBySearchParams(Request $request)
+    {
+        // Lấy thông tin phân trang từ query
+        $limit = $request->input('limit', 10);
+        $page = $request->input('page', 1);
+        $offset = ($page - 1) * $limit;
+
+        $posts = $this->filterService->searchPosts($request, $limit, $offset);
+        $countPosts = $this->filterService->countSearchPosts($request);
+
+        // Tạo meta
+        $meta = $this->addMeta($countPosts, $limit, $offset);
+
+        // Thống kê
+        $stats = [
+            'total' => $countPosts,
+            'views' => $posts->sum('views'),
+            'comments' => $posts->sum('comments_count'),
+        ];
+
         return PostResource::collection($posts)
             ->additional(['meta' => $meta, 'stats' => $stats]);
     }

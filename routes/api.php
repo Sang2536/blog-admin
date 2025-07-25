@@ -8,6 +8,9 @@ use App\Http\Controllers\Api\PostApiController;
 use App\Http\Controllers\Api\RecruitmentController;
 use App\Http\Controllers\Api\TagApiController;
 
+// Search
+Route::get('/search', [PostApiController::class, 'getPostBySearchParams']);
+
 //  Post
 Route::prefix('posts')->group(function () {
     Route::get('/', [PostApiController::class, 'index']);
