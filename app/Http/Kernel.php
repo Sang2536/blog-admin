@@ -2,6 +2,7 @@
 
 namespace App\Http;
 
+use App\Console\Commands\ViewCommand;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -45,5 +46,9 @@ class Kernel extends HttpKernel
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+    ];
+
+    protected $commands = [
+        ViewCommand::class     //  php artisan make:view users.index
     ];
 }
